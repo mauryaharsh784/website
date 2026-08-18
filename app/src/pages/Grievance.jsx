@@ -5,7 +5,7 @@ import Button from "../components/ui/Button";
 import { UploadCloud, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
-const API_URL = "https://gram-panchayat-website-c0d2.onrender.com";
+const API_URL = "http://localhost:5000";
 
 const categoryKeys = [
   "Water Supply",
