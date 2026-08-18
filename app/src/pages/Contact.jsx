@@ -14,8 +14,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = "https://website-69iz.onrender.com";
 
 export default function Contact() {
   const { t } = useLanguage();
