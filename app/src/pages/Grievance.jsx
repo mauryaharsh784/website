@@ -5,7 +5,7 @@ import Button from "../components/ui/Button";
 import { UploadCloud, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "https://website-69iz.onrender.com";
 
 const categoryKeys = [
   "Water Supply",
