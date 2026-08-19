@@ -109,10 +109,10 @@ export default function Home() {
   }));
 
   return (
-    <div>
+    <div className="w-full overflow-x-hidden">
 
       {/* ================= HERO ================= */}
-      <section className="relative flex min-h-[92vh] items-center overflow-hidden">
+      <section className="relative flex min-h-[75vh] items-center overflow-hidden sm:min-h-[85vh] lg:min-h-[92vh]">
 
         <img
           src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80"
@@ -124,38 +124,38 @@ export default function Home() {
 
         <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-transparent to-transparent" />
 
-        <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 px-6 py-28 sm:px-10 lg:grid-cols-[1.3fr_0.9fr] lg:items-center">
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 px-4 py-20 sm:px-8 sm:py-28 lg:grid-cols-[1.3fr_0.9fr] lg:items-center lg:px-10">
 
           <div
             className="animate-fade-up"
             key={lang}
           >
-            <span className="inline-flex items-center rounded-full border border-cream/25 bg-white/10 px-4 py-1.5 font-mono text-xs uppercase tracking-[0.15em] text-saffron-light backdrop-blur-sm">
+            <span className="inline-flex max-w-full items-center rounded-full border border-cream/25 bg-white/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-saffron-light backdrop-blur-sm sm:px-4 sm:text-xs sm:tracking-[0.15em]">
               {t("hero.badge")}
             </span>
 
-            <h1 className="font-display mt-6 text-4xl font-semibold leading-[1.08] text-cream sm:text-5xl md:text-6xl">
+            <h1 className="font-display mt-5 text-3xl font-semibold leading-[1.08] text-cream sm:mt-6 sm:text-5xl md:text-6xl">
               {t("hero.titleLine1")}
               <br />
               {t("hero.titleLine2")}
             </h1>
 
-            <p className="font-display mt-3 text-xl text-saffron-light sm:text-2xl">
+            <p className="font-display mt-3 text-lg text-saffron-light sm:text-2xl">
               {t("hero.villageName")}
             </p>
 
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-cream/80">
+            <p className="mt-4 max-w-lg text-sm leading-relaxed text-cream/80 sm:mt-5 sm:text-base">
               {t("hero.description")}
             </p>
 
-            <div className="mt-9 flex flex-wrap gap-4">
+            <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:gap-4">
 
               <Button
                 as={Link}
                 to="/panchayat"
                 variant="primary"
                 arrow
-                className="group"
+                className="group w-full sm:w-auto"
               >
                 {t("hero.explore")}
               </Button>
@@ -164,6 +164,7 @@ export default function Home() {
                 as={Link}
                 to="/services"
                 variant="outline"
+                className="w-full sm:w-auto"
               >
                 {t("hero.services")}
               </Button>
@@ -171,8 +172,7 @@ export default function Home() {
             </div>
           </div>
 
-
-          {/* SARPANCH CARD */}
+          {/* ================= SARPANCH CARD ================= */}
           <div
             className="glass hidden animate-fade-up rounded-3xl p-6 lg:block"
             style={{ animationDelay: "200ms" }}
@@ -187,10 +187,10 @@ export default function Home() {
               <img
                 src={sarpanch.image}
                 alt={sarpanch.name}
-                className="h-16 w-16 rounded-full object-cover ring-2 ring-white/30"
+                className="h-16 w-16 shrink-0 rounded-full object-cover ring-2 ring-white/30"
               />
 
-              <div>
+              <div className="min-w-0">
                 <div className="font-display text-base font-semibold text-cream">
                   {sarpanch.name}
                 </div>
@@ -210,17 +210,16 @@ export default function Home() {
 
         </div>
 
-        <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 animate-bounce text-cream/70">
-          <ChevronDown size={26} />
+        <div className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 animate-bounce text-cream/70 sm:bottom-8">
+          <ChevronDown size={24} />
         </div>
 
       </section>
 
-
       {/* ================= QUICK ACTIONS ================= */}
-      <section className="relative z-20 mx-auto -mt-16 max-w-7xl px-6 sm:px-10">
+      <section className="relative z-20 mx-auto -mt-8 max-w-7xl px-4 sm:-mt-16 sm:px-8 lg:px-10">
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
 
           {quickActions.map((qa, i) => (
             <QuickActionCard
@@ -234,9 +233,8 @@ export default function Home() {
 
       </section>
 
-
       {/* ================= STATISTICS ================= */}
-      <section className="mx-auto max-w-7xl px-6 py-24 sm:px-10">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24 lg:px-10">
 
         <SectionHeading
           eyebrow={t("stats.eyebrow")}
@@ -244,7 +242,7 @@ export default function Home() {
           description={t("stats.description")}
         />
 
-        <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:mt-12 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
 
           {stats.map((s, i) => (
             <StatCard
@@ -259,30 +257,28 @@ export default function Home() {
 
       </section>
 
-
       {/* ================= ABOUT ================= */}
-      <section className="bg-surface py-24">
+      <section className="bg-surface py-16 sm:py-24">
 
-        <div className="mx-auto grid max-w-7xl gap-14 px-6 sm:px-10 lg:grid-cols-2 lg:items-center">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:gap-14 sm:px-8 lg:grid-cols-2 lg:items-center lg:px-10">
 
           <div className="relative">
 
             <img
               src="https://images.unsplash.com/photo-1596397249129-c7a8f8a97b6a?auto=format&fit=crop&w=900&q=80"
               alt="Gondwa village"
-              className="h-[420px] w-full rounded-3xl object-cover shadow-[0_30px_60px_-24px_rgba(15,61,46,0.35)]"
+              className="h-[280px] w-full rounded-3xl object-cover shadow-[0_30px_60px_-24px_rgba(15,61,46,0.35)] sm:h-[420px]"
             />
 
-            <div className="glass absolute -bottom-6 left-6 rounded-2xl px-5 py-3 text-cream">
+            <div className="glass absolute -bottom-5 left-4 rounded-2xl px-4 py-3 text-cream sm:-bottom-6 sm:left-6 sm:px-5">
 
-              <span className="font-mono text-xs uppercase tracking-wide">
+              <span className="font-mono text-[10px] uppercase tracking-wide sm:text-xs">
                 {t("about.badge")}
               </span>
 
             </div>
 
           </div>
-
 
           <div>
 
@@ -294,10 +290,9 @@ export default function Home() {
               {t("about.title")}
             </h2>
 
-            <p className="mt-5 text-base leading-relaxed text-ink/70">
+            <p className="mt-5 text-sm leading-relaxed text-ink/70 sm:text-base">
               {t("about.text")}
             </p>
-
 
             <div className="mt-7 space-y-3">
 
@@ -308,17 +303,17 @@ export default function Home() {
                 return (
                   <div
                     key={text}
-                    className="flex items-center gap-3"
+                    className="flex items-start gap-3"
                   >
 
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald/10 text-emerald">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald/10 text-emerald">
                       <Icon
                         size={17}
                         strokeWidth={1.75}
                       />
                     </span>
 
-                    <span className="text-sm font-medium text-heading">
+                    <span className="pt-1 text-sm font-medium text-heading">
                       {text}
                     </span>
 
@@ -327,7 +322,6 @@ export default function Home() {
               })}
 
             </div>
-
 
             <Button
               as={Link}
@@ -350,20 +344,19 @@ export default function Home() {
 
       </section>
 
-
       {/* ================= SARPANCH MESSAGE ================= */}
-      <section className="relative overflow-hidden bg-panel py-24">
+      <section className="relative overflow-hidden bg-panel py-16 sm:py-24">
 
         <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-emerald/10" />
 
         <div className="pointer-events-none absolute -right-16 bottom-0 h-72 w-72 rounded-full bg-saffron/10" />
 
-        <div className="relative mx-auto grid max-w-6xl gap-12 px-6 sm:px-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+        <div className="relative mx-auto grid max-w-6xl gap-10 px-4 sm:gap-12 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
 
           <img
             src={sarpanch.image}
             alt={sarpanch.name}
-            className="mx-auto h-72 w-72 rounded-3xl object-cover shadow-[0_30px_60px_-24px_rgba(15,61,46,0.3)] sm:h-96 sm:w-80"
+            className="mx-auto h-72 w-72 max-w-full rounded-3xl object-cover shadow-[0_30px_60px_-24px_rgba(15,61,46,0.3)] sm:h-96 sm:w-80"
           />
 
           <div>
@@ -377,7 +370,7 @@ export default function Home() {
               {t("sarpanchSection.title")}
             </h2>
 
-            <p className="font-display mt-5 text-xl italic leading-relaxed text-heading/85 sm:text-2xl">
+            <p className="font-display mt-5 text-lg italic leading-relaxed text-heading/85 sm:text-2xl">
               "{sarpanch.message}"
             </p>
 
@@ -399,11 +392,10 @@ export default function Home() {
 
       </section>
 
-
       {/* ================= SCHEMES ================= */}
-      <section className="mx-auto max-w-7xl px-6 py-24 sm:px-10">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24 lg:px-10">
 
-        <div className="flex flex-wrap items-end justify-between gap-6">
+        <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:flex-wrap sm:items-end">
 
           <SectionHeading
             eyebrow={t("schemesSection.eyebrow")}
@@ -423,7 +415,7 @@ export default function Home() {
 
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
 
           {schemes.slice(0, 6).map((s) => (
             <SchemeCard
@@ -436,13 +428,12 @@ export default function Home() {
 
       </section>
 
-
       {/* ================= DEVELOPMENT ================= */}
-      <section className="bg-surface py-24">
+      <section className="bg-surface py-16 sm:py-24">
 
-        <div className="mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
 
-          <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:flex-wrap sm:items-end">
 
             <SectionHeading
               eyebrow={t("developmentSection.eyebrow")}
@@ -462,8 +453,7 @@ export default function Home() {
 
           </div>
 
-
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
 
             {developmentWorks.slice(0, 3).map((p) => (
               <DevelopmentCard
@@ -478,16 +468,15 @@ export default function Home() {
 
       </section>
 
-
       {/* ================= NOTICES ================= */}
-      <section className="mx-auto max-w-7xl px-6 py-24 sm:px-10">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24 lg:px-10">
 
         <SectionHeading
           eyebrow={t("noticesSection.eyebrow")}
           title={t("noticesSection.title")}
         />
 
-        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 lg:grid-cols-2">
 
           <NoticeCard
             notice={notices.find((n) => n.featured)}
@@ -526,20 +515,19 @@ export default function Home() {
 
       </section>
 
-
       {/* ================= CITIZEN SERVICES ================= */}
-      <section className="bg-surface py-24">
+      <section className="bg-surface py-16 sm:py-24">
 
-        <div className="mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
 
-          <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:flex-wrap sm:items-end">
 
             <SectionHeading
               eyebrow={t("servicesSection.eyebrow")}
               title={t("servicesSection.title")}
             />
 
-            <div className="max-w-xs rounded-2xl border border-forest/10 bg-panel p-4">
+            <div className="w-full max-w-xs rounded-2xl border border-forest/10 bg-panel p-4 sm:w-auto">
 
               <div className="font-display text-sm font-semibold text-heading">
                 {t("servicesSection.needHelp")}
@@ -553,8 +541,7 @@ export default function Home() {
 
           </div>
 
-
-          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="mt-10 grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 sm:mt-12 sm:grid-cols-3 lg:grid-cols-4">
 
             {services.map((s) => (
               <ServiceCard
@@ -569,11 +556,10 @@ export default function Home() {
 
       </section>
 
-
       {/* ================= GRIEVANCE ================= */}
-      <section className="mx-auto max-w-7xl px-6 py-24 sm:px-10">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24 lg:px-10">
 
-        <div className="grid gap-12 rounded-[2.5rem] bg-forest p-10 sm:p-14 lg:grid-cols-2 lg:items-center">
+        <div className="grid gap-10 rounded-[2rem] bg-forest p-6 sm:gap-12 sm:rounded-[2.5rem] sm:p-10 lg:grid-cols-2 lg:items-center lg:p-14">
 
           <div>
 
@@ -585,7 +571,7 @@ export default function Home() {
               {t("grievanceSection.title")}
             </h2>
 
-            <p className="mt-4 text-cream/75">
+            <p className="mt-4 text-sm text-cream/75 sm:text-base">
               {t("grievanceSection.text")}
             </p>
 
@@ -594,9 +580,9 @@ export default function Home() {
               {grievanceFeatures.map((f) => (
                 <div
                   key={f}
-                  className="flex items-center gap-3 text-sm text-cream/85"
+                  className="flex items-start gap-3 text-sm text-cream/85"
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-saffron-light" />
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-saffron-light" />
 
                   {f}
                 </div>
@@ -616,8 +602,7 @@ export default function Home() {
 
           </div>
 
-
-          <div className="glass rounded-3xl p-8">
+          <div className="glass rounded-3xl p-6 sm:p-8">
 
             <MessageSquareWarning
               size={32}
@@ -632,7 +617,7 @@ export default function Home() {
 
             </div>
 
-            <div className="mt-6 flex items-center justify-between rounded-xl bg-white/10 p-4">
+            <div className="mt-6 flex flex-col gap-2 rounded-xl bg-white/10 p-4 sm:flex-row sm:items-center sm:justify-between">
 
               <span className="font-mono text-xs text-cream/70">
                 {t("grievanceSection.refLabel")}
@@ -650,100 +635,107 @@ export default function Home() {
 
       </section>
 
-
       {/* ================= VILLAGE MAP ================= */}
-      {/* ================= VILLAGE MAP ================= */}
-<section className="bg-surface py-24">
-  <div className="mx-auto max-w-7xl px-6 sm:px-10">
+      <section className="bg-surface py-16 sm:py-24">
 
-    <SectionHeading
-      eyebrow={t("mapSection.eyebrow")}
-      title={t("mapSection.title")}
-    />
+        <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
 
-    <div className="mt-12 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+          <SectionHeading
+            eyebrow={t("mapSection.eyebrow")}
+            title={t("mapSection.title")}
+          />
 
-      {/* GOOGLE MAP */}
-      <div className="h-[400px] overflow-hidden rounded-3xl border border-forest/10 bg-panel sm:h-[500px]">
-        <iframe
-          title="Gondwa Village Location"
-          src="https://www.google.com/maps?q=27.0804653,81.9596692&z=17&output=embed"
-          className="block h-full w-full border-0"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
-      </div>
+          <div className="mt-10 grid gap-6 sm:mt-12 lg:grid-cols-[1.4fr_1fr]">
 
-      {/* CONTACT INFORMATION */}
-      <div className="flex flex-col justify-center space-y-4">
+            {/* GOOGLE MAP */}
+            <div className="h-[320px] overflow-hidden rounded-3xl border border-forest/10 bg-panel sm:h-[500px]">
 
-        <ContactCard
-          icon={MapPin}
-          label={t("mapSection.addressLabel")}
-          value="Panchayat Bhavan, Gondwa, Gonda, Uttar Pradesh 271001"
-        />
+              <iframe
+                title="Gondwa Village Location"
+                src="https://www.google.com/maps?q=27.0804653,81.9596692&z=17&output=embed"
+                className="block h-full w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
 
-        <ContactCard
-          icon={Phone}
-          label={t("mapSection.phoneLabel")}
-          value="+91 8299307415"
-        />
+            </div>
 
-        <ContactCard
-          icon={Mail}
-          label={t("mapSection.emailLabel")}
-          value="office@gpgondwa.gov.demo"
-        />
+            {/* CONTACT INFORMATION */}
+            <div className="flex flex-col justify-center space-y-4">
 
-        <ContactCard
-          icon={Clock}
-          label={t("mapSection.hoursLabel")}
-          value={t("topbar.hours")}
-        />
+              <ContactCard
+                icon={MapPin}
+                label={t("mapSection.addressLabel")}
+                value="Panchayat Bhavan, Gondwa, Gonda, Uttar Pradesh 271001"
+              />
 
-        {/* GET DIRECTIONS */}
-        <a
-          href={GOOGLE_MAPS_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-forest px-5 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald"
-        >
-          <MapPinned size={17} />
+              <ContactCard
+                icon={Phone}
+                label={t("mapSection.phoneLabel")}
+                value="+91 8299307415"
+              />
 
-          {t("mapSection.getDirections")}
+              <ContactCard
+                icon={Mail}
+                label={t("mapSection.emailLabel")}
+                value="office@gpgondwa.gov.demo"
+              />
 
-          <ArrowRight size={16} />
-        </a>
+              <ContactCard
+                icon={Clock}
+                label={t("mapSection.hoursLabel")}
+                value={t("topbar.hours")}
+              />
 
-      </div>
-    </div>
-  </div>
-</section>
+              {/* GET DIRECTIONS */}
+              <a
+                href={GOOGLE_MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-forest px-5 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald"
+              >
+
+                <MapPinned size={17} />
+
+                {t("mapSection.getDirections")}
+
+                <ArrowRight size={16} />
+
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
 
       {/* ================= CTA ================= */}
-      <section className="relative overflow-hidden bg-forest-dark py-24">
+      <section className="relative overflow-hidden bg-forest-dark py-16 sm:py-24">
 
         <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-emerald/20 blur-3xl" />
 
         <div className="pointer-events-none absolute -left-16 bottom-0 h-56 w-56 rounded-full bg-saffron/15 blur-3xl" />
 
-        <div className="relative mx-auto max-w-3xl px-6 text-center sm:px-10">
+        <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-8">
 
           <h2 className="font-display text-3xl font-semibold text-cream sm:text-4xl">
             {t("ctaSection.title")}
           </h2>
 
-          <p className="mt-4 text-cream/75">
+          <p className="mt-4 text-sm text-cream/75 sm:text-base">
             {t("ctaSection.description")}
           </p>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
 
             <Button
               as={Link}
               to="/services"
               variant="primary"
               arrow
+              className="w-full sm:w-auto"
             >
               {t("ctaSection.exploreServices")}
             </Button>
@@ -752,6 +744,7 @@ export default function Home() {
               as={Link}
               to="/contact"
               variant="outline"
+              className="w-full sm:w-auto"
             >
               {t("ctaSection.contactPanchayat")}
             </Button>

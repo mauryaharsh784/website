@@ -68,30 +68,34 @@ const grievanceSchema = new mongoose.Schema(
   }
 );
 
-// Automatically generate reference number
+// Generate reference number automatically
 grievanceSchema.pre("save", async function (next) {
-  if (this.referenceNumber) {
-    return next();
+  try {
+    if (this.referenceNumber) {
+      return next();
+    }
+
+    let referenceNumber;
+    let exists = true;
+
+    while (exists) {
+      const randomNumber = Math.floor(
+        10000 + Math.random() * 90000
+      );
+
+      referenceNumber = `GP-2026-${randomNumber}`;
+
+      exists = await mongoose.models.Grievance.exists({
+        referenceNumber,
+      });
+    }
+
+    this.referenceNumber = referenceNumber;
+
+    next();
+  } catch (error) {
+    next(error);
   }
-
-  let referenceNumber;
-  let exists = true;
-
-  while (exists) {
-    const randomNumber = Math.floor(
-      10000 + Math.random() * 90000
-    );
-
-    referenceNumber = `GP-2026-${randomNumber}`;
-
-    exists = await mongoose.models.Grievance.exists({
-      referenceNumber,
-    });
-  }
-
-  this.referenceNumber = referenceNumber;
-
-  next();
 });
 
 module.exports = mongoose.model(

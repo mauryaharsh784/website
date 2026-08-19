@@ -21,117 +21,172 @@ const navKeys = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
   const location = useLocation();
   const { t } = useLanguage();
 
+  /* ================= SCROLL ================= */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 12);
+    };
 
-    window.addEventListener("scroll", onScroll);
+    handleScroll();
 
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
+  /* ================= CLOSE MENU ON ROUTE CHANGE ================= */
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
 
+  /* ================= LOCK BODY SCROLL ================= */
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-surface/90 shadow-[0_4px_24px_-8px_rgba(15,61,46,0.15)] backdrop-blur-md"
+          ? "bg-surface/95 shadow-[0_4px_24px_-8px_rgba(15,61,46,0.15)] backdrop-blur-md"
           : "bg-page"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5 sm:px-10">
-        <Link to="/" className="flex items-center gap-3">
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-forest text-cream shadow-md">
-            <Sprout size={20} strokeWidth={1.75} />
+      {/* =====================================================
+          NAVBAR
+      ====================================================== */}
+      <div className="mx-auto flex min-h-[60px] w-full max-w-7xl items-center justify-between gap-2 px-3 py-2 sm:min-h-[68px] sm:px-6 sm:py-3 lg:px-10">
+
+        {/* ================= LOGO ================= */}
+        <Link
+          to="/"
+          className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest text-cream shadow-md sm:h-11 sm:w-11">
+            <Sprout
+              size={18}
+              strokeWidth={1.75}
+              className="sm:h-5 sm:w-5"
+            />
           </span>
 
-          <span className="flex flex-col leading-tight">
-            <span className="font-display text-lg font-semibold text-heading">
+          <span className="flex min-w-0 flex-col leading-tight">
+            <span className="truncate font-display text-sm font-semibold text-heading sm:text-lg">
               Gram Panchayat
             </span>
 
-            <span className="font-mono text-[11px] uppercase tracking-wide text-saffron">
+            <span className="font-mono text-[9px] uppercase tracking-wide text-saffron sm:text-[11px]">
               Gondwa
             </span>
           </span>
         </Link>
 
+        {/* ================= DESKTOP NAV ================= */}
         <nav className="hidden items-center gap-1 xl:flex">
-          {navKeys.map((l) => (
+          {navKeys.map((item) => (
             <NavLink
-              key={l.to}
-              to={l.to}
-              end={l.to === "/"}
+              key={item.to}
+              to={item.to}
+              end={item.to === "/"}
               className={({ isActive }) =>
-                `rounded-full px-3.5 py-2 text-[13.5px] font-medium transition-colors duration-200 ${
+                `rounded-full px-3 py-2 text-[13px] font-medium transition-colors duration-200 ${
                   isActive
                     ? "text-emerald"
                     : "text-ink/70 hover:text-accent"
                 }`
               }
             >
-              {t(l.key)}
+              {t(item.key)}
             </NavLink>
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <PreferenceToggles className="hidden md:flex" />
+        {/* ================= RIGHT SIDE ================= */}
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
 
+          {/* Preferences - desktop */}
+          <PreferenceToggles className="hidden lg:flex" />
+
+          {/* Citizen Services - desktop/tablet */}
           <Link
             to="/services"
-            className="hidden rounded-full bg-saffron px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_20px_-8px_rgba(221,124,52,0.6)] transition-all duration-300 hover:bg-saffron-light hover:-translate-y-0.5 md:inline-flex"
+            className="hidden rounded-full bg-saffron px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_-8px_rgba(221,124,52,0.6)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-saffron-light md:inline-flex"
           >
             {t("nav.citizenServices")}
           </Link>
 
+          {/* ================= MOBILE MENU BUTTON ================= */}
           <button
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-forest/15 dark:border-line text-accent xl:hidden"
+            type="button"
+            onClick={() => setOpen((prev) => !prev)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-forest/15 text-accent transition-colors hover:bg-emerald/10 dark:border-line xl:hidden"
           >
-            {open ? <X size={20} /> : <Menu size={20} />}
+            {open ? (
+              <X size={20} />
+            ) : (
+              <Menu size={20} />
+            )}
           </button>
         </div>
       </div>
 
+      {/* =====================================================
+          MOBILE MENU
+      ====================================================== */}
       <div
-        className={`overflow-hidden transition-all duration-300 xl:hidden ${
+        className={`absolute left-0 right-0 top-full z-50 overflow-hidden border-t border-forest/10 bg-surface shadow-xl transition-all duration-300 dark:border-line xl:hidden ${
           open
-            ? "max-h-[640px] border-t border-forest/10 dark:border-line"
-            : "max-h-0"
+            ? "visible max-h-[calc(100vh-60px)] opacity-100"
+            : "invisible max-h-0 opacity-0"
         }`}
       >
-        <nav className="flex flex-col gap-1 bg-surface px-6 py-4">
-          {navKeys.map((l) => (
+        <nav className="max-h-[calc(100vh-60px)] overflow-y-auto overscroll-contain px-4 py-4 sm:px-6">
+
+          {/* Navigation links */}
+          {navKeys.map((item) => (
             <NavLink
-              key={l.to}
-              to={l.to}
-              end={l.to === "/"}
+              key={item.to}
+              to={item.to}
+              end={item.to === "/"}
               className={({ isActive }) =>
-                `rounded-xl px-4 py-2.5 text-sm font-medium ${
+                `mb-1 block rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                   isActive
                     ? "bg-emerald/10 text-emerald"
-                    : "text-ink/70"
+                    : "text-ink/70 hover:bg-emerald/5"
                 }`
               }
             >
-              {t(l.key)}
+              {t(item.key)}
             </NavLink>
           ))}
 
-          <div className="mt-3 flex items-center justify-between gap-3 border-t border-forest/10 dark:border-line pt-4">
+          {/* Preferences */}
+          <div className="mt-3 border-t border-forest/10 pt-4 dark:border-line">
             <PreferenceToggles />
           </div>
 
+          {/* Citizen Services */}
           <Link
             to="/services"
-            className="mt-2 rounded-full bg-saffron px-5 py-3 text-center text-sm font-semibold text-white"
+            className="mt-3 block rounded-full bg-saffron px-5 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-saffron-light"
           >
             {t("nav.citizenServices")}
           </Link>

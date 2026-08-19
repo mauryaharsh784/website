@@ -1,4 +1,6 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -8,8 +10,7 @@
   --font-body: "Work Sans", "Noto Sans Devanagari", sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
 
-  /* Fixed brand colors — always the same in light & dark theme.
-     Used on deliberately-colored blocks (hero, footer, CTA, buttons). */
+  /* Brand colors */
   --color-forest: #0f3d2e;
   --color-forest-dark: #0a2b20;
   --color-emerald: #1c7a50;
@@ -19,7 +20,7 @@
   --color-saffron: #dd7c34;
   --color-saffron-light: #eda15f;
 
-  /* Adaptive semantic tokens — flip between light/dark theme. */
+  /* Light theme */
   --color-page: #faf6ec;
   --color-panel: #f1ead9;
   --color-surface: #ffffff;
@@ -28,6 +29,8 @@
   --color-accent: #0f3d2e;
   --color-line: #0f3d2e1a;
 }
+
+/* ================= DARK THEME ================= */
 
 .dark {
   --color-page: #101d18;
@@ -39,26 +42,75 @@
   --color-line: #f4efe31a;
 }
 
+/* ================= GLOBAL MOBILE FIX ================= */
+
 html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-x: hidden;
+
   font-family: var(--font-body);
   background-color: var(--color-page);
   color: var(--color-ink);
-  transition: background-color 0.3s ease, color 0.3s ease;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+/* Make images responsive everywhere */
+img {
+  max-width: 100%;
+}
+
+/* Prevent long text/email/URLs from breaking mobile layout */
+p,
+span,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* ================= SELECTION ================= */
 
 ::selection {
   background-color: var(--color-saffron-light);
   color: var(--color-forest-dark);
 }
 
-.font-display { font-family: var(--font-display); }
-.font-mono { font-family: var(--font-mono); }
+/* ================= FONTS ================= */
 
-/* Signature road-stitch divider */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* ================= ROAD STITCH ================= */
+
 .road-stitch {
   background-image: repeating-linear-gradient(
     to bottom,
@@ -67,6 +119,7 @@ body {
     transparent 8px,
     transparent 16px
   );
+
   width: 2px;
 }
 
@@ -78,40 +131,95 @@ body {
     transparent 8px,
     transparent 16px
   );
+
   height: 2px;
 }
 
+/* ================= ANIMATIONS ================= */
+
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .animate-fade-up {
   animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes count-in {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
+
 .animate-count-in {
   animation: count-in 0.5s ease-out both;
 }
 
+/* ================= GLASS ================= */
+
 .glass {
   background: rgba(255, 255, 255, 0.12);
+
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+/* ================= HIDE SCROLLBAR ================= */
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ================= MOBILE SAFETY ================= */
+
+@media (max-width: 639px) {
+  * {
+    max-width: 100%;
+  }
+
+  iframe {
+    max-width: 100%;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    max-width: 100%;
+  }
+}
+
+/* ================= REDUCED MOTION ================= */
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
 }
+

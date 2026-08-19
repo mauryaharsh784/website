@@ -6,19 +6,23 @@ export default function TopBar() {
 
   return (
     <div className="hidden bg-forest-dark text-cream/80 sm:block">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 text-xs sm:px-10">
-        <div className="flex items-center gap-5">
+      <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2 text-xs sm:flex-row sm:items-center sm:justify-between sm:px-10">
+        
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
           <span className="flex items-center gap-1.5">
-            <Phone size={12} /> +91 8299307415
+            <Phone size={12} />
+            +91 8299307415
           </span>
 
-          <span className="flex items-center gap-1.5">
-            <Mail size={12} /> office@gpgondwa.gov.demo
+          <span className="flex items-center gap-1.5 break-all">
+            <Mail size={12} />
+            office@gpgondwa.gov.demo
           </span>
         </div>
 
         <span className="flex items-center gap-1.5">
-          <Clock size={12} /> {t("topbar.hours")}
+          <Clock size={12} />
+          {t("topbar.hours")}
         </span>
       </div>
     </div>

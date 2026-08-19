@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 require("dotenv").config();
 
 const authMiddleware = require("./middleware/authMiddleware");
@@ -16,16 +17,23 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-// ================================
+// ======================================
 // MIDDLEWARE
-// ================================
+// ======================================
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
 
-// ================================
+// ======================================
 // MONGODB
-// ================================
+// ======================================
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -36,9 +44,9 @@ mongoose
     console.error("MongoDB connection error:", error);
   });
 
-// ================================
+// ======================================
 // TEST ROUTE
-// ================================
+// ======================================
 
 app.get("/", (req, res) => {
   res.json({
@@ -47,19 +55,19 @@ app.get("/", (req, res) => {
   });
 });
 
-// ================================
+// ======================================
 // FAMILY REGISTRY
-// ================================
+// ======================================
 
 app.use("/api/families", familyRoutes);
 
-// ================================
+// ======================================
 // CREATE ADMIN
-// ================================
+// ======================================
 
 app.post("/api/admin/create", async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password } = req.body || {};
 
     if (!username || !password) {
       return res.status(400).json({
@@ -68,8 +76,20 @@ app.post("/api/admin/create", async (req, res) => {
       });
     }
 
+    const cleanUsername = String(username)
+      .trim()
+      .toLowerCase();
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Password must be at least 6 characters",
+      });
+    }
+
     const existingAdmin = await Admin.findOne({
-      username: username.toLowerCase(),
+      username: cleanUsername,
     });
 
     if (existingAdmin) {
@@ -79,10 +99,13 @@ app.post("/api/admin/create", async (req, res) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(
+      password,
+      12
+    );
 
     const admin = await Admin.create({
-      username: username.toLowerCase(),
+      username: cleanUsername,
       password: hashedPassword,
     });
 
@@ -104,13 +127,13 @@ app.post("/api/admin/create", async (req, res) => {
   }
 });
 
-// ================================
+// ======================================
 // ADMIN LOGIN
-// ================================
+// ======================================
 
 app.post("/api/admin/login", async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password } = req.body || {};
 
     if (!username || !password) {
       return res.status(400).json({
@@ -119,8 +142,12 @@ app.post("/api/admin/login", async (req, res) => {
       });
     }
 
+    const cleanUsername = String(username)
+      .trim()
+      .toLowerCase();
+
     const admin = await Admin.findOne({
-      username: username.toLowerCase(),
+      username: cleanUsername,
     });
 
     if (!admin) {
@@ -130,15 +157,23 @@ app.post("/api/admin/login", async (req, res) => {
       });
     }
 
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      admin.password
-    );
+    const isPasswordCorrect =
+      await bcrypt.compare(
+        password,
+        admin.password
+      );
 
     if (!isPasswordCorrect) {
       return res.status(401).json({
         success: false,
         message: "Invalid username or password",
+      });
+    }
+
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({
+        success: false,
+        message: "JWT_SECRET is not configured",
       });
     }
 
@@ -172,69 +207,176 @@ app.post("/api/admin/login", async (req, res) => {
   }
 });
 
-// ================================
+// ======================================
 // CREATE GRIEVANCE
 // PUBLIC ROUTE
-// ================================
+// ======================================
 
 app.post("/api/grievances", async (req, res) => {
   try {
-    console.log("Grievance request body:", req.body);
+    console.log(
+      "Grievance request body:",
+      req.body
+    );
 
     const {
       name,
       mobile,
       email,
-      subject,
-      message,
+      address,
+      category,
+      description,
     } = req.body || {};
 
-    if (!name || !email || !message) {
+    // ----------------------------------
+    // Required fields
+    // ----------------------------------
+
+    if (
+      !name ||
+      !mobile ||
+      !address ||
+      !category ||
+      !description
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Name, email and message are required",
+        message:
+          "Name, mobile, address, category and description are required",
       });
     }
+
+    // ----------------------------------
+    // Clean data
+    // ----------------------------------
 
     const cleanName = String(name).trim();
-    const cleanEmail = String(email).trim().toLowerCase();
 
-    const cleanMobile = mobile
-      ? String(mobile).trim()
-      : "Not provided";
+    const cleanMobile = String(mobile).trim();
 
-    const cleanSubject = subject
-      ? String(subject).trim()
-      : "General Enquiry";
+    const cleanEmail = email
+      ? String(email).trim().toLowerCase()
+      : "";
 
-    const cleanMessage = String(message).trim();
+    const cleanAddress = String(address).trim();
 
-    if (cleanMessage.length < 5) {
+    const cleanCategory = String(category).trim();
+
+    const cleanDescription =
+      String(description).trim();
+
+    // ----------------------------------
+    // Name validation
+    // ----------------------------------
+
+    if (cleanName.length < 2) {
       return res.status(400).json({
         success: false,
-        message: "Message must be at least 5 characters",
+        message: "Name must be at least 2 characters",
       });
     }
+
+    // ----------------------------------
+    // Mobile validation
+    // ----------------------------------
+
+    if (!/^[6-9]\d{9}$/.test(cleanMobile)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Enter a valid 10-digit mobile number",
+      });
+    }
+
+    // ----------------------------------
+    // Email validation
+    // Only if email provided
+    // ----------------------------------
+
+    if (
+      cleanEmail &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        cleanEmail
+      )
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid email address",
+      });
+    }
+
+    // ----------------------------------
+    // Category validation
+    // ----------------------------------
+
+    const allowedCategories = [
+      "Water Supply",
+      "Roads & Infrastructure",
+      "Sanitation",
+      "Electricity",
+      "Public Health",
+      "Other",
+    ];
+
+    if (!allowedCategories.includes(cleanCategory)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid grievance category",
+      });
+    }
+
+    // ----------------------------------
+    // Description validation
+    // ----------------------------------
+
+    if (cleanDescription.length < 20) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Description must be at least 20 characters",
+      });
+    }
+
+    // ----------------------------------
+    // Create grievance
+    // ----------------------------------
 
     const grievance = await Grievance.create({
       name: cleanName,
       mobile: cleanMobile,
       email: cleanEmail,
-
-      address: "",
-      category: cleanSubject,
-      description: cleanMessage,
-
+      address: cleanAddress,
+      category: cleanCategory,
+      description: cleanDescription,
       status: "Pending",
     });
+
+    // ----------------------------------
+    // Response
+    // ----------------------------------
 
     return res.status(201).json({
       success: true,
       message: "Grievance submitted successfully",
-      grievance,
+      grievance: {
+        id: grievance._id,
+        referenceNumber:
+          grievance.referenceNumber,
+        name: grievance.name,
+        mobile: grievance.mobile,
+        email: grievance.email,
+        address: grievance.address,
+        category: grievance.category,
+        description: grievance.description,
+        status: grievance.status,
+        createdAt: grievance.createdAt,
+      },
     });
   } catch (error) {
-    console.error("Create grievance error:", error);
+    console.error(
+      "Create grievance error:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
@@ -243,19 +385,20 @@ app.post("/api/grievances", async (req, res) => {
   }
 });
 
-// ================================
+// ======================================
 // GET ALL GRIEVANCES
 // ADMIN ONLY
-// ================================
+// ======================================
 
 app.get(
   "/api/grievances",
   authMiddleware,
   async (req, res) => {
     try {
-      const grievances = await Grievance.find().sort({
-        createdAt: -1,
-      });
+      const grievances =
+        await Grievance.find().sort({
+          createdAt: -1,
+        });
 
       return res.status(200).json({
         success: true,
@@ -263,7 +406,10 @@ app.get(
         grievances,
       });
     } catch (error) {
-      console.error("Fetch grievances error:", error);
+      console.error(
+        "Fetch grievances error:",
+        error
+      );
 
       return res.status(500).json({
         success: false,
@@ -273,19 +419,20 @@ app.get(
   }
 );
 
-// ================================
+// ======================================
 // GET SINGLE GRIEVANCE
 // ADMIN ONLY
-// ================================
+// ======================================
 
 app.get(
   "/api/grievances/:id",
   authMiddleware,
   async (req, res) => {
     try {
-      const grievance = await Grievance.findById(
-        req.params.id
-      );
+      const grievance =
+        await Grievance.findById(
+          req.params.id
+        );
 
       if (!grievance) {
         return res.status(404).json({
@@ -299,7 +446,10 @@ app.get(
         grievance,
       });
     } catch (error) {
-      console.error("Get grievance error:", error);
+      console.error(
+        "Get grievance error:",
+        error
+      );
 
       return res.status(500).json({
         success: false,
@@ -309,17 +459,17 @@ app.get(
   }
 );
 
-// ================================
-// UPDATE STATUS
+// ======================================
+// UPDATE GRIEVANCE STATUS
 // ADMIN ONLY
-// ================================
+// ======================================
 
 app.patch(
   "/api/grievances/:id/status",
   authMiddleware,
   async (req, res) => {
     try {
-      const { status } = req.body;
+      const { status } = req.body || {};
 
       const allowedStatuses = [
         "Pending",
@@ -337,7 +487,9 @@ app.patch(
       const grievance =
         await Grievance.findByIdAndUpdate(
           req.params.id,
-          { status },
+          {
+            status,
+          },
           {
             new: true,
             runValidators: true,
@@ -357,20 +509,24 @@ app.patch(
         grievance,
       });
     } catch (error) {
-      console.error("Update status error:", error);
+      console.error(
+        "Update status error:",
+        error
+      );
 
       return res.status(500).json({
         success: false,
-        message: "Unable to update status",
+        message:
+          "Unable to update grievance status",
       });
     }
   }
 );
 
-// ================================
+// ======================================
 // DELETE GRIEVANCE
 // ADMIN ONLY
-// ================================
+// ======================================
 
 app.delete(
   "/api/grievances/:id",
@@ -394,33 +550,50 @@ app.delete(
         message: "Grievance deleted successfully",
       });
     } catch (error) {
-      console.error("Delete grievance error:", error);
+      console.error(
+        "Delete grievance error:",
+        error
+      );
 
       return res.status(500).json({
         success: false,
-        message: "Unable to delete grievance",
+        message:
+          "Unable to delete grievance",
       });
     }
   }
 );
 
-// ================================
+// ======================================
 // 404 ROUTE
-// ================================
+// ======================================
 
 app.use((req, res) => {
-  res.status(404).json({
+  return res.status(404).json({
     success: false,
     message: "Route not found",
   });
 });
 
-// ================================
+// ======================================
+// GLOBAL ERROR HANDLER
+// ======================================
+
+app.use((error, req, res, next) => {
+  console.error("Unhandled error:", error);
+
+  return res.status(500).json({
+    success: false,
+    message: "Internal server error",
+  });
+});
+
+// ======================================
 // START SERVER
-// ================================
+// ======================================
 
 app.listen(PORT, () => {
   console.log(
-    `Server running on http://localhost:${PORT}`
+    `Server running on port ${PORT}`
   );
 });

@@ -1,147 +1,172 @@
+
 import { Link } from "react-router-dom";
-import {
-  Sprout,
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Rss,
-  MessageCircle,
-  Send,
-} from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
 
 export default function Footer() {
   const { t } = useLanguage();
 
-  const quickLinks = [
-    [t("nav.home"), "/"],
-    [t("nav.about"), "/about"],
-    [t("nav.panchayat"), "/panchayat"],
-    [t("nav.schemes"), "/schemes"],
-    [t("nav.development"), "/development"],
-  ];
-
-  const serviceLinks = [
-    [t("nav.notices"), "/notices"],
-    [t("nav.documents"), "/documents"],
-    [t("nav.grievance"), "/grievance"],
-    [t("nav.services"), "/services"],
-    [t("nav.gallery"), "/gallery"],
-  ];
-
   return (
-    <footer className="bg-forest-dark text-cream/80">
-      <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="border-t border-forest/10 bg-surface dark:border-line">
+      <div className="mx-auto max-w-7xl px-6 py-12 sm:px-10 lg:px-12">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+
+          {/* Panchayat */}
           <div>
-            <Link to="/" className="flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-saffron text-white">
-                <Sprout size={20} strokeWidth={1.75} />
-              </span>
+            <h3 className="text-lg font-bold text-heading">
+              Gram Panchayat Gondwa
+            </h3>
 
-              <span className="flex flex-col leading-tight">
-                <span className="font-display text-lg font-semibold text-cream">
-                  Gram Panchayat
-                </span>
-
-                <span className="font-mono text-[11px] uppercase tracking-wide text-saffron-light">
-                  Gondwa
-                </span>
-              </span>
-            </Link>
-
-            <p className="mt-4 text-sm leading-relaxed text-cream/60">
-              {t("footer.description")}
+            <p className="mt-4 text-sm leading-6 text-ink/60">
+              Digital platform of Gram Panchayat Gondwa for
+              citizen services, schemes, development works
+              and grievance redressal.
             </p>
+          </div>
 
-            <div className="mt-5 flex gap-3">
-              {[Rss, MessageCircle, Send].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-cream/15 text-cream/70 transition-colors hover:border-saffron hover:text-saffron-light"
-                >
-                  <Icon size={15} />
-                </a>
-              ))}
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-heading">
+              {t("footer.quickLinks") || "Quick Links"}
+            </h3>
+
+            <div className="mt-4 space-y-3">
+              <Link
+                to="/"
+                className="block text-sm text-ink/60 transition-colors hover:text-emerald"
+              >
+                {t("nav.home") || "Home"}
+              </Link>
+
+              <Link
+                to="/about"
+                className="block text-sm text-ink/60 transition-colors hover:text-emerald"
+              >
+                {t("nav.about") || "About"}
+              </Link>
+
+              <Link
+                to="/services"
+                className="block text-sm text-ink/60 transition-colors hover:text-emerald"
+              >
+                {t("nav.services") || "Services"}
+              </Link>
+
+              <Link
+                to="/grievance"
+                className="block text-sm text-ink/60 transition-colors hover:text-emerald"
+              >
+                {t("nav.grievance") || "Grievance"}
+              </Link>
             </div>
           </div>
 
+          {/* Citizen Services */}
           <div>
-            <h4 className="font-display text-sm font-semibold uppercase tracking-wide text-cream">
-              {t("footer.quickLinks")}
-            </h4>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-heading">
+              {t("footer.citizenServices") || "Citizen Services"}
+            </h3>
 
-            <ul className="mt-4 space-y-2.5 text-sm">
-              {quickLinks.map(([label, to]) => (
-                <li key={to}>
-                  <Link
-                    to={to}
-                    className="text-cream/60 transition-colors hover:text-saffron-light"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-4 space-y-3">
+              <Link
+                to="/services"
+                className="block text-sm text-ink/60 transition-colors hover:text-emerald"
+              >
+                {t("nav.citizenServices") || "Citizen Services"}
+              </Link>
+
+              <Link
+                to="/schemes"
+                className="block text-sm text-ink/60 transition-colors hover:text-emerald"
+              >
+                {t("nav.schemes") || "Schemes"}
+              </Link>
+
+              <Link
+                to="/works"
+                className="block text-sm text-ink/60 transition-colors hover:text-emerald"
+              >
+                {t("nav.works") || "Development Works"}
+              </Link>
+
+              <Link
+                to="/notices"
+                className="block text-sm text-ink/60 transition-colors hover:text-emerald"
+              >
+                {t("nav.notices") || "Notices"}
+              </Link>
+            </div>
           </div>
 
+          {/* Contact */}
           <div>
-            <h4 className="font-display text-sm font-semibold uppercase tracking-wide text-cream">
-              {t("footer.citizenServices")}
-            </h4>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-heading">
+              {t("footer.contact") || "Contact"}
+            </h3>
 
-            <ul className="mt-4 space-y-2.5 text-sm">
-              {serviceLinks.map(([label, to]) => (
-                <li key={to}>
-                  <Link
-                    to={to}
-                    className="text-cream/60 transition-colors hover:text-saffron-light"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <div className="mt-4 space-y-4">
 
-          <div>
-            <h4 className="font-display text-sm font-semibold uppercase tracking-wide text-cream">
-              {t("footer.contact")}
-            </h4>
-
-            <ul className="mt-4 space-y-3 text-sm text-cream/60">
-              <li className="flex gap-2.5">
+              <div className="flex items-start gap-3">
                 <MapPin
-                  size={16}
-                  className="mt-0.5 shrink-0 text-saffron-light"
+                  size={18}
+                  className="mt-0.5 shrink-0 text-emerald"
                 />
-                Panchayat Bhavan, Gondwa, Gonda, UP 271001
-              </li>
 
-              <li className="flex gap-2.5">
-                <Phone size={16} className="shrink-0 text-saffron-light" />
-                +91 8299307415
-              </li>
+                <p className="text-sm leading-6 text-ink/60">
+                  Gram Panchayat Gondwa
+                  <br />
+                  Uttar Pradesh, India
+                </p>
+              </div>
 
-              <li className="flex gap-2.5">
-                <Mail size={16} className="shrink-0 text-saffron-light" />
-                office@gpgondwa.gov.in
-              </li>
+              <div className="flex items-center gap-3">
+                <Phone
+                  size={18}
+                  className="shrink-0 text-emerald"
+                />
 
-              <li className="flex gap-2.5">
-                <Clock size={16} className="shrink-0 text-saffron-light" />
-                {t("topbar.hours")}
-              </li>
-            </ul>
+                <span className="text-sm text-ink/60">
+                  Panchayat Office
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Mail
+                  size={18}
+                  className="shrink-0 text-emerald"
+                />
+
+                <span className="text-sm text-ink/60">
+                  Official Panchayat Contact
+                </span>
+              </div>
+
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-cream/10">
-        <div className="mx-auto flex max-w-7xl items-center justify-center px-6 py-6 text-xs text-cream/50 sm:px-10">
-          <span>{t("footer.copyright")}</span>
+        {/* Bottom */}
+        <div className="mt-10 flex flex-col gap-3 border-t border-forest/10 pt-6 dark:border-line sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-ink/50">
+            © {new Date().getFullYear()} Gram Panchayat Gondwa.
+            All rights reserved.
+          </p>
+
+          <div className="flex gap-5">
+            <Link
+              to="/privacy"
+              className="text-xs text-ink/50 transition-colors hover:text-emerald"
+            >
+              Privacy Policy
+            </Link>
+
+            <Link
+              to="/terms"
+              className="text-xs text-ink/50 transition-colors hover:text-emerald"
+            >
+              Terms
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
