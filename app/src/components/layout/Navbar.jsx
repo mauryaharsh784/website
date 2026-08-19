@@ -25,7 +25,6 @@ export default function Navbar() {
   const location = useLocation();
   const { t } = useLanguage();
 
-  /* ================= SCROLL ================= */
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 12);
@@ -42,12 +41,10 @@ export default function Navbar() {
     };
   }, []);
 
-  /* ================= CLOSE MENU ON ROUTE CHANGE ================= */
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
 
-  /* ================= LOCK BODY SCROLL ================= */
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -68,15 +65,13 @@ export default function Navbar() {
           : "bg-page"
       }`}
     >
-      {/* =====================================================
-          NAVBAR
-      ====================================================== */}
-      <div className="mx-auto flex min-h-[60px] w-full max-w-7xl items-center justify-between gap-2 px-3 py-2 sm:min-h-[68px] sm:px-6 sm:py-3 lg:px-10">
+      {/* ================= NAVBAR ================= */}
+      <div className="mx-auto flex min-h-[60px] w-full max-w-7xl items-center gap-4 px-3 py-2 sm:min-h-[68px] sm:px-6 sm:py-3 lg:px-10">
 
         {/* ================= LOGO ================= */}
         <Link
           to="/"
-          className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3"
+          className="flex shrink-0 items-center gap-2 sm:gap-3"
         >
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest text-cream shadow-md sm:h-11 sm:w-11">
             <Sprout
@@ -86,26 +81,26 @@ export default function Navbar() {
             />
           </span>
 
-          <span className="flex min-w-0 flex-col leading-tight">
-            <span className="truncate font-display text-sm font-semibold text-heading sm:text-lg">
+          <span className="flex shrink-0 flex-col whitespace-nowrap leading-tight">
+            <span className="whitespace-nowrap font-display text-sm font-semibold text-heading sm:text-lg">
               Gram Panchayat
             </span>
 
-            <span className="font-mono text-[9px] uppercase tracking-wide text-saffron sm:text-[11px]">
+            <span className="whitespace-nowrap font-mono text-[9px] uppercase tracking-wide text-saffron sm:text-[11px]">
               Gondwa
             </span>
           </span>
         </Link>
 
         {/* ================= DESKTOP NAV ================= */}
-        <nav className="hidden items-center gap-1 xl:flex">
+        <nav className="ml-auto hidden items-center gap-1 xl:flex">
           {navKeys.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.to === "/"}
               className={({ isActive }) =>
-                `rounded-full px-3 py-2 text-[13px] font-medium transition-colors duration-200 ${
+                `whitespace-nowrap rounded-full px-3 py-2 text-[13px] font-medium transition-colors duration-200 ${
                   isActive
                     ? "text-emerald"
                     : "text-ink/70 hover:text-accent"
@@ -118,20 +113,20 @@ export default function Navbar() {
         </nav>
 
         {/* ================= RIGHT SIDE ================= */}
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 xl:ml-3">
 
-          {/* Preferences - desktop */}
+          {/* Preferences */}
           <PreferenceToggles className="hidden lg:flex" />
 
-          {/* Citizen Services - desktop/tablet */}
+          {/* Citizen Services */}
           <Link
             to="/services"
-            className="hidden rounded-full bg-saffron px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_-8px_rgba(221,124,52,0.6)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-saffron-light md:inline-flex"
+            className="hidden whitespace-nowrap rounded-full bg-saffron px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_-8px_rgba(221,124,52,0.6)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-saffron-light md:inline-flex"
           >
             {t("nav.citizenServices")}
           </Link>
 
-          {/* ================= MOBILE MENU BUTTON ================= */}
+          {/* Mobile Menu */}
           <button
             type="button"
             onClick={() => setOpen((prev) => !prev)}
@@ -139,18 +134,12 @@ export default function Navbar() {
             aria-expanded={open}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-forest/15 text-accent transition-colors hover:bg-emerald/10 dark:border-line xl:hidden"
           >
-            {open ? (
-              <X size={20} />
-            ) : (
-              <Menu size={20} />
-            )}
+            {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
-      {/* =====================================================
-          MOBILE MENU
-      ====================================================== */}
+      {/* ================= MOBILE MENU ================= */}
       <div
         className={`absolute left-0 right-0 top-full z-50 overflow-hidden border-t border-forest/10 bg-surface shadow-xl transition-all duration-300 dark:border-line xl:hidden ${
           open
@@ -160,7 +149,6 @@ export default function Navbar() {
       >
         <nav className="max-h-[calc(100vh-60px)] overflow-y-auto overscroll-contain px-4 py-4 sm:px-6">
 
-          {/* Navigation links */}
           {navKeys.map((item) => (
             <NavLink
               key={item.to}
@@ -178,12 +166,10 @@ export default function Navbar() {
             </NavLink>
           ))}
 
-          {/* Preferences */}
           <div className="mt-3 border-t border-forest/10 pt-4 dark:border-line">
             <PreferenceToggles />
           </div>
 
-          {/* Citizen Services */}
           <Link
             to="/services"
             className="mt-3 block rounded-full bg-saffron px-5 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-saffron-light"
